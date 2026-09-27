@@ -289,7 +289,7 @@ After your tests pass, your CLI should have full functionality.
 To try it out, from the project root, run:
 
 ```bash
-python lib/shift_cli
+python lib/shift_cli.py
 ```
 
 Generated AI responses may vary because the model creates the output.
@@ -645,7 +645,7 @@ ollama pull llama3.2
 has been run, and then start the app again:
 
 ```bash
-python lib/shift_cli
+python lib/shift_cli.py
 ```
 
 ---
@@ -660,11 +660,8 @@ Your code should not depend on the model returning the exact wording shown in th
 
 ## Reflection
 
-After completing the lab, answer these questions for yourself:
-
-1. What responsibility belongs to the AI client?
-2. What responsibility belongs to the brief builder?
-3. What responsibility belongs to the CLI?
-4. Why should the AI client stay generic instead of including shift-handoff-specific language?
-5. How did the tests help guide your implementation?
-6. How could this reusable client pattern transfer later into a Flask API, RAG workflow, or full-stack AI application?
+1. **AI client:** Owns generic model communication, prompt validation, response extraction, service errors, and conversation history. The brief builder owns shift-handoff prompts and response checks; the CLI owns commands, input, and displayed messages.
+2. **Why keep the client generic?** A client without retail or handoff rules can be reused for other application workflows without changing its service layer.
+3. **How the builder separates responsibilities:** It turns shift notes and revision feedback into domain-specific prompts, checks the required brief sections, and formats results while calling only the client's public `send()` method.
+4. **How tests helped:** The tests provided a checklist for normal behavior and edge cases, including failed service calls, blank input, unusable responses, history rollback, command routing, and architecture boundaries.
+5. **How the pattern can transfer:** A Flask endpoint, RAG pipeline, or full-stack app can reuse the same generic AI client and builder while replacing the CLI with another interface layer.
